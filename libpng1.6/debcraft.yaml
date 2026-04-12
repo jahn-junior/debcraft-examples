@@ -1,0 +1,104 @@
+name: libpng1.6
+version: 1.6.56-1
+summary: PNG library - runtime (version 1.6)
+description: |
+   libpng is a library implementing an interface for reading and writing
+   PNG (Portable Network Graphics) format files.
+
+   This package contains the runtime library files needed to run software
+   using libpng.
+base: ubuntu@24.04
+maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+original-maintainer: Maintainers of libpng1.6 packages <libpng1.6@packages.debian.org>
+section: libs
+
+packages:
+  libpng16-16t64:
+    provides:
+      - libpng16-16
+    breaks:
+      - libpng16-16 (<< $CRAFT_PROJECT_VERSION)
+    replaces:
+      - libpng16-16
+
+  libpng-dev:
+    section: libdevel
+    summary: PNG library - development (version 1.6)
+    description: |
+      libpng is a library implementing an interface for reading and writing
+      PNG (Portable Network Graphics) format files.
+
+      This package contains the header and development files needed to build
+      programs and packages using libpng.
+    depends:
+      - libpng16-16t64 (= $CRAFT_PROJECT_VERSION)
+    conflicts:
+      - libpng12-0-dev
+      - libpng12-dev
+      - libpng2-dev
+      - libpng3-dev
+    breaks:
+      - libpng16-dev (<< 1.6.20-3)
+      - libpng16-devtools (<< 1.6.21-1)
+    replaces:
+      - libpng16-dev (<< 1.6.20-3)
+      - libpng16-devtools (<< 1.6.21-1)
+    recommends:
+      - libpng-tools
+
+  libpng-tools:
+    section: libdevel
+    summary: PNG library - tools (version 1.6)
+    description: |
+      libpng is a library implementing an interface for reading and writing
+      PNG (Portable Network Graphics) format files.
+
+      This package contains a program to interact with libpng from the
+      command line.
+    depends:
+      - libpng16-16t64 (= $CRAFT_PROJECT_VERSION)
+    breaks:
+      - libpng16-tools (<< 1.6.21-1)
+    replaces:
+      - libpng16-tools (<< 1.6.21-1)
+
+    # Pending: udeb package support
+
+parts:
+  libpng1.6:
+    plugin: autotools
+    autotools-configure-parameters:
+      # To be handled automatically
+      - --prefix=/usr
+      - CFLAGS="$(dpkg-buildflags --get CFLAGS) $(dpkg-buildflags --get CPPFLAGS)"
+      - LDFLAGS="$(dpkg-buildflags --get LDFLAGS)"
+    source: https://git.launchpad.net/ubuntu/+source/libpng1.6
+    source-type: git
+    source-tag: applied/$CRAFT_PROJECT_VERSION
+    build-packages:
+      - build-essential
+      - zlib1g-dev
+    organize:
+      usr/lib/*.so.16*: (package/libpng16-16t64)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
+      usr/share/doc/libpng16-16t64: (package/libpng16-16t64)/usr/share/doc/libpng16-16t64
+      (build)/README: (package/libpng16-16t64)/usr/share/doc/libpng16-16t64/
+      (build)/ANNOUNCE: (package/libpng16-16t64)/usr/share/doc/libpng16-16t64/
+      (build)/TODO: (package/libpng16-16t64)/usr/share/doc/libpng16-16t64/
+      (build)/libpng-manual.txt: (package/libpng16-16t64)/usr/share/doc/libpng16-16t64/
+      # To be handled by helpers
+      (build)/debian/libpng16-16t64.doc-base: (package/libpng16-16t64)/usr/share/doc-base/libpng16-16t64.libpng16
+      (build)/debian/libpng16-16t64.lintian-overrides: (package/libpng16-16t64)/usr/share/lintian/overrides/libpn16-16t64
+
+      usr/bin/libpng-config: (package/libpng-dev)/usr/bin/
+      usr/bin/libpng16-config: (package/libpng-dev)/usr/bin/
+      usr/include: (package/libpng-dev)/usr/include
+      usr/lib/pkgconfig: (package/libpng-dev)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
+      usr/lib/*.a: (package/libpng-dev)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
+      usr/lib/*.so: (package/libpng-dev)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
+      usr/share/doc/libpng-16: (package/libpng-dev)/usr/share/doc/libpng-dev
+      usr/share/man: (package/libpng-dev)/usr/share/man
+      # To be handled by helpers
+      (build)/debian/*.1: (package/libpng-dev)/usr/share/man/man1/
+
+      usr/bin/png-fix-itxt: (package/libpng-tools)/usr/bin/
+      usr/bin/pngfix: (package/libpng-tools)/usr/bin/
