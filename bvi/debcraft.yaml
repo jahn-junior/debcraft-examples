@@ -1,0 +1,40 @@
+name: bvi
+version: 1.5.0-1
+summary: binary file editor
+description: |
+  The bvi is a display-oriented editor for binary files, based on the vi
+  text editor. If you are familiar with vi, just start the editor and begin to
+  edit! If you never heard about vi, maybe bvi is not the best choice for you.
+base: ubuntu@24.04
+maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+original-maintainer: Étienne Mollier <emollier@debian.org>
+section: universe/editors
+
+packages:
+  bvi:
+    section: editors
+
+parts:
+  bvi:
+    plugin: autotools
+    source: https://git.launchpad.net/ubuntu/+source/bvi
+    source-type: git
+    source-tag: applied/$CRAFT_PROJECT_VERSION
+    autotools-configure-parameters:
+      - --prefix=/usr
+      #- $(dpkg-buildflags --export=cmdline)
+      - CFLAGS="$(dpkg-buildflags --get CFLAGS)"
+      - CPPFLAGS="$(dpkg-buildflags --get CPPFLAGS)"
+      - LDFLAGS="$(dpkg-buildflags --get LDFLAGS)"
+    build-packages:
+      - libncurses-dev
+    override-build: |
+      craftctl default
+      ln -s bvi.1 "$CRAFT_PART_INSTALL"/usr/share/man/man1/bview.1
+      ln -s bvi.1 "$CRAFT_PART_INSTALL"/usr/share/man/man1/bvedit.1
+    organize:
+      (build)/README: usr/share/doc/bvi/
+      (build)/CREDITS: usr/share/doc/bvi/
+      (build)/bvi/*.1: usr/share/man/man1/
+      (build)/debian/menu: usr/share/menu/bvi
+
