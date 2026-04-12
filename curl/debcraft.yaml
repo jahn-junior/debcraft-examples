@@ -1,0 +1,173 @@
+name: curl
+version: 8.5.0-2
+summary:  command line tool for transferring data with URL syntax
+description: |
+  curl is a command line tool for transferring data with URL syntax, supporting
+  DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3,
+  POP3S, RTMP, RTSP, SCP, SFTP, SMTP, SMTPS, TELNET and TFTP.
+
+  curl supports SSL certificates, HTTP POST, HTTP PUT, FTP uploading, HTTP form
+  based upload, proxies, cookies, user+password authentication (Basic, Digest,
+  NTLM, Negotiate, kerberos...), file transfer resume, proxy tunneling and a
+  busload of other useful tricks.
+base: ubuntu@24.04
+maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+section: web
+
+packages:
+  curl:
+    section: web
+
+  libcurl4t64:
+    summary: easy-to-use client-side URL transfer library (OpenSSL flavour)
+    description: |
+      libcurl is an easy-to-use client-side URL transfer library, supporting DICT,
+      FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3, POP3S,
+      RTMP, RTSP, SCP, SFTP, SMTP, SMTPS, TELNET and TFTP.
+
+      libcurl supports SSL certificates, HTTP POST, HTTP PUT, FTP uploading, HTTP
+      form based upload, proxies, cookies, user+password authentication (Basic,
+      Digest, NTLM, Negotiate, Kerberos), file transfer resume, http proxy tunneling
+      and more!
+
+      libcurl is free, thread-safe, IPv6 compatible, feature rich, well supported,
+      fast, thoroughly documented and is already used by many known, big and
+      successful companies and numerous applications.
+
+      SSL support is provided by OpenSSL.
+    section: libs
+    provides:
+      - libcurl4
+    breaks:
+      - libcurl4 (<< $CRAFT_PROJECT_VERSION)
+    recommends:
+      - ca-certificates
+    conflicts:
+      - libcurl3
+    replaces:
+      - libcurl4
+      - libcurl3
+
+  libcurl4-openssl-dev:
+    summary: development files and documentation for libcurl (OpenSSL flavour)
+    description: |
+      libcurl is an easy-to-use client-side URL transfer library, supporting DICT,
+      FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3, POP3S,
+      RTMP, RTSP, SCP, SFTP, SMTP, SMTPS, TELNET and TFTP.
+
+      libcurl supports SSL certificates, HTTP POST, HTTP PUT, FTP uploading, HTTP
+      form based upload, proxies, cookies, user+password authentication (Basic,
+      Digest, NTLM, Negotiate, Kerberos), file transfer resume, http proxy tunneling
+      and more!
+
+      libcurl is free, thread-safe, IPv6 compatible, feature rich, well supported,
+      fast, thoroughly documented and is already used by many known, big and
+      successful companies and numerous applications.
+
+      This package provides the development files (ie. includes, static library,
+      manual pages) that allow one to build software which uses libcurl.
+
+      SSL support is provided by OpenSSL.
+    section: libdevel
+    provides:
+      - libcurl-dev
+      - libcurl-ssl-dev
+      - libcurl3-openssl-dev
+      - libcurl4-dev
+      - libcurl3-dev
+    conflicts:
+      - libcurl4-gnutls-dev
+      - libssl1.0-dev
+    depends:
+      - libcurl4t64 (= $CRAFT_PROJECT_VERSION)
+    #suggests:
+    #  - libcurl4-doc
+    #  - libidn-dev
+    #  - libkrb5-dev
+    #  - libldap2-dev
+    #  - librtmp-dev
+    #  - libssh2-1-dev
+    #  - libssl-dev
+    #  - pkg-config
+    #  - zlib1g-dev
+
+  # TODO: libcurl with gnutls
+
+  libcurl4-doc:
+    summary: documentation for libcurl
+    description: |
+      libcurl is an easy-to-use client-side URL transfer library, supporting DICT,
+      FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3, POP3S,
+      RTMP, RTSP, SCP, SFTP, SMTP, SMTPS, TELNET and TFTP.
+
+      libcurl supports SSL certificates, HTTP POST, HTTP PUT, FTP uploading, HTTP
+      form based upload, proxies, cookies, user+password authentication (Basic,
+      Digest, NTLM, Negotiate, Kerberos), file transfer resume, http proxy tunneling
+      and more!
+
+      libcurl is free, thread-safe, IPv6 compatible, feature rich, well supported,
+      fast, thoroughly documented and is already used by many known, big and
+      successful companies and numerous applications.
+
+      This package provides the documentation files for libcurl.
+    section: doc
+    # multi-arch: foreign
+
+parts:
+  curl:
+    plugin: autotools
+    autotools-configure-parameters:
+      - prefix=/usr
+      #- $(dpkg-buildflags --export cmdline)
+      - CFLAGS="$(dpkg-buildflags --get CFLAGS)"
+      - CPPFLAGS="$(dpkg-buildflags --get CPPFLAGS)"
+      - LDFLAGS="$(dpkg-buildflags --get LDFLAGS)"
+      - --with-openssl
+      - --disable-dependency-tracking
+      - --disable-symbol-hiding
+      - --enable-versioned-symbols
+      - --enable-threaded-resolver
+      - --with-lber-lib=lber
+      - --with-gssapi=/usr
+      - --with-nghttp2
+      - --with-zsh-functions-dir=/usr/share/zsh/vendor-completions
+    source: https://git.launchpad.net/ubuntu/+source/curl
+    source-type: git
+    source-tag: applied/$CRAFT_PROJECT_VERSION
+    build-packages:
+      - ca-certificates
+      - dh-exec
+      - groff-base
+      - libbrotli-dev
+      - libgnutls28-dev
+      - libidn2-dev
+      - libkrb5-dev
+      - libldap2-dev
+      - libnghttp2-dev
+      - libpsl-dev
+      - librtmp-dev
+      - libssh-dev
+      - libssh2-1-dev
+      - libssl-dev
+      - libtool
+      - libzstd-dev
+      - zlib1g-dev
+    organize:
+      (build)/debian/README.Debian: usr/share/doc/curl/
+
+      usr/lib/libcurl.so.4*: (package/libcurl4t64)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
+      # To be automatically handled
+      (build)/debian/libcurl4t64.lintian-overrides: (package/libcurl4t64)/usr/share/lintian/overrides/libcurl4t64
+
+      usr/bin/curl-config: (package/libcurl4-openssl-dev)/usr/bin/
+      usr/include: (package/libcurl4-openssl-dev)/usr/include
+      usr/lib/*.a: (package/libcurl4-openssl-dev)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
+      usr/lib/*.so: (package/libcurl4-openssl-dev)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
+      usr/lib/*.la: (package/libcurl4-openssl-dev)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
+      usr/lib/pkgconfig: (package/libcurl4-openssl-dev)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
+      usr/share/aclocal: (package/libcurl4-openssl-dev)/usr/share/aclocal
+      usr/share/man/man1/curl-config*: (package/libcurl4-openssl-dev)/usr/share/man/man1/
+
+      usr/share/man/man3: (package/libcurl4-doc)/usr/share/man/man3
+
+    # TODO: make check
