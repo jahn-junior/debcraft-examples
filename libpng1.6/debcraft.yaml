@@ -87,7 +87,6 @@ parts:
       (build)/libpng-manual.txt: (package/libpng16-16t64)/usr/share/doc/libpng16-16t64/
       # To be handled by helpers
       (build)/debian/libpng16-16t64.doc-base: (package/libpng16-16t64)/usr/share/doc-base/libpng16-16t64.libpng16
-      (build)/debian/libpng16-16t64.lintian-overrides: (package/libpng16-16t64)/usr/share/lintian/overrides/libpn16-16t64
 
       usr/bin/libpng-config: (package/libpng-dev)/usr/bin/
       usr/bin/libpng16-config: (package/libpng-dev)/usr/bin/
@@ -97,7 +96,6 @@ parts:
       usr/lib/*.so: (package/libpng-dev)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
       usr/share/doc/libpng-16: (package/libpng-dev)/usr/share/doc/libpng-dev
       usr/share/man: (package/libpng-dev)/usr/share/man
-      # To be handled by helpers
       (build)/debian/*.1: (package/libpng-dev)/usr/share/man/man1/
 
       usr/bin/png-fix-itxt: (package/libpng-tools)/usr/bin/

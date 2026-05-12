@@ -80,16 +80,16 @@ packages:
       - libssl1.0-dev
     depends:
       - libcurl4t64 (= $CRAFT_PROJECT_VERSION)
-    #suggests:
-    #  - libcurl4-doc
-    #  - libidn-dev
-    #  - libkrb5-dev
-    #  - libldap2-dev
-    #  - librtmp-dev
-    #  - libssh2-1-dev
-    #  - libssl-dev
-    #  - pkg-config
-    #  - zlib1g-dev
+    suggests:
+      - libcurl4-doc
+      - libidn-dev
+      - libkrb5-dev
+      - libldap2-dev
+      - librtmp-dev
+      - libssh2-1-dev
+      - libssl-dev
+      - pkg-config
+      - zlib1g-dev
 
   # TODO: libcurl with gnutls
 
@@ -111,7 +111,7 @@ packages:
 
       This package provides the documentation files for libcurl.
     section: doc
-    # multi-arch: foreign
+    multi-arch: foreign
 
 parts:
   curl:
@@ -156,8 +156,6 @@ parts:
       (build)/debian/README.Debian: usr/share/doc/curl/
 
       usr/lib/libcurl.so.4*: (package/libcurl4t64)/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/
-      # To be automatically handled
-      (build)/debian/libcurl4t64.lintian-overrides: (package/libcurl4t64)/usr/share/lintian/overrides/libcurl4t64
 
       usr/bin/curl-config: (package/libcurl4-openssl-dev)/usr/bin/
       usr/include: (package/libcurl4-openssl-dev)/usr/include

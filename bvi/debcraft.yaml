@@ -22,7 +22,6 @@ parts:
     source-tag: applied/$CRAFT_PROJECT_VERSION
     autotools-configure-parameters:
       - --prefix=/usr
-      #- $(dpkg-buildflags --export=cmdline)
       - CFLAGS="$(dpkg-buildflags --get CFLAGS)"
       - CPPFLAGS="$(dpkg-buildflags --get CPPFLAGS)"
       - LDFLAGS="$(dpkg-buildflags --get LDFLAGS)"
