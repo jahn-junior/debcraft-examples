@@ -49,7 +49,7 @@ parts:
       (build)/ChangeLog.gz: usr/share/doc/htop/changelog.gz
       (build)/AUTHORS: usr/share/doc/htop/
 
-  debian-dir:
+  distro-files:
     plugin: dump
     source: debian
     override-build:
