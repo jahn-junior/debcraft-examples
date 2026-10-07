@@ -52,7 +52,7 @@ parts:
   distro-files:
     plugin: dump
     source: debian
-    override-build:
+    override-build: |
       gzip -9nf changelog
     organize:
       (build)/changelog.gz: usr/share/doc/htop/changelog.Debian.gz
