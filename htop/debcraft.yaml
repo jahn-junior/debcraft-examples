@@ -37,13 +37,10 @@ parts:
       craftctl default
       strip --remove-section=.comment --remove-section=.note \
         $CRAFT_PART_INSTALL/usr/bin/htop
-      gzip -9nf $CRAFT_PART_BUILD/README.md
-      gzip -9nf $CRAFT_PART_BUILD/NEWS
-      gzip -9nf $CRAFT_PART_BUILD/ChangeLog
     organize:
-      (build)/README.md.gz: usr/share/doc/htop/
-      (build)/NEWS.gz: usr/share/doc/htop/
-      (build)/ChangeLog.gz: usr/share/doc/htop/changelog.gz
+      (build)/README.md: usr/share/doc/htop/
+      (build)/NEWS: usr/share/doc/htop/
+      (build)/ChangeLog: usr/share/doc/htop/changelog
       (build)/AUTHORS: usr/share/doc/htop/
 
   distro-files:
