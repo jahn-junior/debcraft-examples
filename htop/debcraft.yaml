@@ -29,9 +29,6 @@ parts:
     autotools-configure-parameters:
       - --prefix=/usr
       - --enable-sensors
-      - CFLAGS="$(dpkg-buildflags --get CFLAGS)"
-      - CPPFLAGS="$(dpkg-buildflags --get CPPFLAGS)"
-      - LDFLAGS="$(dpkg-buildflags --get LDFLAGS)"
     build-packages:
       - libncurses-dev
       - libsensors-dev
